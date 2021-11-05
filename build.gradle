@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext.kotlin_version = '1.5.31'
+    ext.version_dokka = '1.5.31'
     repositories {
         google()
         mavenCentral()
@@ -11,9 +12,14 @@ buildscript {
         classpath 'com.apollographql.apollo:apollo-gradle-plugin:2.5.9'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${version_dokka}"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 task clean(type: Delete) {
@@ -23,3 +29,5 @@ task clean(type: Delete) {
 repositories {
     google()
 }
+
+apply from: "${rootDir}/scripts/publish-root.gradle"
