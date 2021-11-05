@@ -1,0 +1,3 @@
+rootProject.name = "wheelpicker"
+include ':app'
+include ':wheelpicker'
