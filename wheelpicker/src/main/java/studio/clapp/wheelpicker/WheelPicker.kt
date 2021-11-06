@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.*
 import android.view.animation.DecelerateInterpolator
 import android.widget.OverScroller
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import studio.clapp.wheelpicker.adapters.WheelAdapter
@@ -105,11 +107,10 @@ class WheelPicker @JvmOverloads constructor(
             R.styleable.WheelPicker_textColor,
             ContextCompat.getColor(context, R.color.text_color_time_picker)
         )
-        mTextSize =
-            attributesArray.getDimensionPixelSize(
-                R.styleable.WheelPicker_textSize,
-                DEFAULT_TEXT_SIZE
-            )
+        mTextSize = attributesArray.getDimensionPixelSize(
+            R.styleable.WheelPicker_textSize,
+            DEFAULT_TEXT_SIZE
+        )
         val textAlignInt = attributesArray.getInt(R.styleable.WheelPicker_align, 1)
         val textAlignArray = TextAlign.values()
         mTextAlign = textAlignArray[textAlignInt % textAlignArray.size].toString()
@@ -179,6 +180,8 @@ class WheelPicker @JvmOverloads constructor(
         }
         return suggested
     }
+
+    fun getSuggestedMinHeight(): Int = suggestedMinimumHeight
 
     override fun getMinimumWidth(): Int = suggestedMinimumWidth
 
@@ -281,6 +284,14 @@ class WheelPicker @JvmOverloads constructor(
 
     fun getSelectedTextScale(): Float = mSelectedTextScale
 
+    fun setSelectedTextScale(mSelectedTextScale: Float) {
+        this.mSelectedTextScale = mSelectedTextScale
+    }
+
+    fun setTextSize(@DimenRes mTextSizeRes: Int) {
+        this.mTextSize = context.resources.getDimension(mTextSizeRes).toInt()
+    }
+
     fun setOnUpListener(touchUpListener: () -> Unit) {
         this.touchUpListener = touchUpListener
     }
@@ -323,8 +334,9 @@ class WheelPicker @JvmOverloads constructor(
         scrollTo(getPosition(value))
     }
 
-    fun setUnselectedTextColor(resourceId: Int) {
-        mUnSelectedTextColor = resourceId
+    fun setUnselectedTextColor(@ColorRes colorId: Int) {
+        mUnSelectedTextColor = ContextCompat.getColor(context, colorId)
+        invalidate()
     }
 
     /**
@@ -404,7 +416,7 @@ class WheelPicker @JvmOverloads constructor(
     /**
      * Set color for current selected item
      */
-    fun setSelectedTextColor(colorId: Int) {
+    fun setSelectedTextColor(@ColorRes colorId: Int) {
         mSelectedTextColor = ContextCompat.getColor(context, colorId)
         invalidate()
     }
@@ -477,7 +489,7 @@ class WheelPicker @JvmOverloads constructor(
         mPreviousScrollerY = 0
         var deltaY = mInitialFirstItemOffset - mCurrentFirstItemOffset
 
-        if (Math.abs(deltaY) > mItemHeight / 2) {
+        if (abs(deltaY) > mItemHeight / 2) {
             deltaY += if (deltaY > 0)
                 -mItemHeight
             else

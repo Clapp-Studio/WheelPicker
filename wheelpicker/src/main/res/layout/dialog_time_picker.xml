@@ -20,7 +20,6 @@
         android:id="@+id/dialog_time_picker__tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,16 +28,12 @@
     <studio.clapp.wheelpicker.WheelPicker
         android:id="@+id/dialog_time_picker__hour_picker"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/dialog_time_picker__tv_title"
-        android:layout_marginTop="16dp"
         app:align="LEFT"
         app:layout_constraintEnd_toStartOf="@+id/dialog_time_picker__minute_picker"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_time_picker__tv_title"
-        app:selectedTextScale="1.2"
-        app:textSize="42sp"
-        app:wheelItemCount="5" />
+        app:layout_constraintTop_toBottomOf="@id/dialog_time_picker__tv_title" />
 
     <TextView
         android:id="@+id/dialog_time_picker__tv_hour"
@@ -52,15 +47,11 @@
     <studio.clapp.wheelpicker.WheelPicker
         android:id="@+id/dialog_time_picker__minute_picker"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         app:align="RIGHT"
-        app:layout_constraintBottom_toBottomOf="@id/dialog_time_picker__hour_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/dialog_time_picker__hour_picker"
-        app:layout_constraintTop_toTopOf="@id/dialog_time_picker__hour_picker"
-        app:selectedTextScale="1.2"
-        app:textSize="42sp"
-        app:wheelItemCount="5" />
+        app:layout_constraintTop_toBottomOf="@id/dialog_time_picker__tv_title" />
 
     <TextView
         android:id="@+id/dialog_time_picker__tv_minute"

@@ -2,29 +2,27 @@ package studio.clapp.wheelpicker.dialog
 
 import android.content.Context
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.annotation.ColorRes
-import androidx.annotation.StringRes
-import androidx.annotation.StyleRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import studio.clapp.wheelpicker.adapters.HourPickerAdapter
 import studio.clapp.wheelpicker.adapters.MinutePickerAdapter
 import studio.clapp.wheelpicker.databinding.DialogTimePickerBinding
-import com.airbnb.paris.extensions.style
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import studio.clapp.wheelpicker.R
+import studio.clapp.wheelpicker.extensions.applyProperties
 
 class TimePickerDialog(
     context: Context,
     @StyleRes theme: Int,
-    private val title: String,
+    private val titleProperties: TitleProperties,
+    private val wheelPickerProperties: WheelPickerProperties,
+    private val textProperties: TextProperties,
+    private val buttonProperties: ButtonProperties,
     private val onPickedListener: ((Int, Int) -> Unit)?,
-    @ColorRes private val buttonBackgroundColor: Int,
-    @ColorRes private val buttonTextColor: Int,
-    @StyleRes private val textStyle: Int,
-    @StyleRes private val titleStyle: Int,
-    private val selectedTime: Pair<Int, Int>,
-    private val buttonText: String
+    private val selectedTime: Pair<String, String>
 ) : BottomSheetDialog(context, theme) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +35,17 @@ class TimePickerDialog(
 
         with(binding) {
             with(dialogTimePickerTvTitle) {
-                text = title
-                style(titleStyle)
+                setText(titleProperties.titleRes)
+                setTextColor(ContextCompat.getColor(context, titleProperties.textColorRes))
+                textSize = resources.getDimension(titleProperties.textSizeRes)
+                if (titleProperties.textFontRes != 0) {
+                    typeface = ResourcesCompat.getFont(context, titleProperties.textFontRes)
+                }
+                layoutParams = (layoutParams as ViewGroup.MarginLayoutParams).apply {
+                    topMargin = resources.getDimension(titleProperties.marginTopRes).toInt()
+                }
             }
+
             with(dialogTimePickerMbPick) {
                 setOnClickListener {
                     onPickedListener?.invoke(
@@ -48,16 +54,39 @@ class TimePickerDialog(
                     )
                     dismiss()
                 }
-                text = buttonText
-                setBackgroundColor(ContextCompat.getColor(context, buttonBackgroundColor))
-                setTextColor(ContextCompat.getColor(context, buttonTextColor))
+                setText(buttonProperties.textRes)
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        buttonProperties.buttonBackgroundColorRes
+                    )
+                )
+                setTextColor(ContextCompat.getColor(context, buttonProperties.textColorRes))
+                textSize = resources.getDimension(buttonProperties.textSizeRes)
+                if (buttonProperties.textFontRes != 0) {
+                    typeface = ResourcesCompat.getFont(context, buttonProperties.textFontRes)
+                }
+                setPadding(
+                    0,
+                    resources.getDimension(buttonProperties.paddingTopRes).toInt(),
+                    0,
+                    resources.getDimension(buttonProperties.paddingBottomRes).toInt()
+                )
+                layoutParams = (layoutParams as ViewGroup.MarginLayoutParams).apply {
+                    leftMargin = resources.getDimension(buttonProperties.marginStartRes).toInt()
+                    topMargin = resources.getDimension(buttonProperties.marginTopRes).toInt()
+                    rightMargin = resources.getDimension(buttonProperties.marginEndRes).toInt()
+                    bottomMargin = resources.getDimension(buttonProperties.marginBottomRes).toInt()
+                }
+                setCornerRadiusResource(buttonProperties.cornerRadiusRes)
             }
 
             with(dialogTimePickerHourPicker) {
                 setAdapter(hourPickerAdapter)
                 setOnUpListener { behavior.isDraggable = true }
                 setOnDownListener { behavior.isDraggable = false }
-                scrollToValue(selectedTime.first.toString())
+                applyProperties(wheelPickerProperties)
+                scrollToValue(selectedTime.first)
                 viewTreeObserver.addOnGlobalLayoutListener(object :
                     ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
@@ -71,15 +100,23 @@ class TimePickerDialog(
                         viewTreeObserver.removeOnGlobalLayoutListener(this)
                     }
                 })
-
-                dialogTimePickerTvHour.style(textStyle)
             }
 
+            with(dialogTimePickerTvHour) {
+                applyProperties(textProperties)
+                setText(textProperties.hoursRes)
+            }
+
+            with(dialogTimePickerTvMinute) {
+                applyProperties(textProperties)
+                setText(textProperties.minutesRes)
+            }
             with(dialogTimePickerMinutePicker) {
                 setAdapter(minutePickerAdapter)
                 setOnUpListener { behavior.isDraggable = true }
                 setOnDownListener { behavior.isDraggable = false }
-                scrollToValue(selectedTime.second.toString())
+                applyProperties(wheelPickerProperties)
+                scrollToValue(selectedTime.second)
                 viewTreeObserver.addOnGlobalLayoutListener(object :
                     ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
@@ -87,13 +124,12 @@ class TimePickerDialog(
                         dialogTimePickerTvMinute.setPadding(
                             0,
                             dialogTimePickerTvMinute.textSize.toInt(),
-                            ((paddingRight - (minimumWidth * getSelectedTextScale() - minimumWidth) * 1.5).toInt()),
+                            ((paddingRight - (minimumWidth * getSelectedTextScale() - minimumWidth) * 1.75f).toInt()),
                             0
                         )
                         viewTreeObserver.removeOnGlobalLayoutListener(this)
                     }
                 })
-                dialogTimePickerTvMinute.style(textStyle)
             }
             setContentView(root)
         }
@@ -101,84 +137,99 @@ class TimePickerDialog(
 
     class Builder(private val context: Context) {
 
-        private var title: String = context.getString(R.string.title)
+        private var titleProperties = TitleProperties()
 
-        private var buttonText: String = context.getString(R.string.pick)
+        private var wheelPickerProperties = WheelPickerProperties()
+
+        private var textProperties = TextProperties()
+
+        private var buttonProperties = ButtonProperties()
 
         @StyleRes
         private var theme: Int = R.style.BottomSheetDialog_Theme
 
-        @ColorRes
-        private var buttonBackgroundColor: Int = R.color.button_tint_primary
-
-        @ColorRes
-        private var buttonTextColor: Int = R.color.text_color_button
-
-        @StyleRes
-        private var textStyle: Int = R.style.TimePicker_Text
-
-        @StyleRes
-        private var titleStyle: Int = R.style.TimePicker_Title
-
         private var onPickedListener: ((Int, Int) -> Unit)? = null
 
-        private var selectedTime: Pair<Int, Int> = Pair(0, 0)
+        private var selectedTime: Pair<String, String> = Pair("0", "0")
 
-        fun setTitle(title: String) = apply {
-            this.title = title
+        fun setTitleProperties(titleProperties: TitleProperties) = apply {
+            this.titleProperties = titleProperties
         }
 
-        fun setTitle(@StringRes titleRes: Int) = apply {
-            this.title = context.getString(titleRes)
+        fun setWheelPickerProperties(wheelPickerProperties: WheelPickerProperties) = apply {
+            this.wheelPickerProperties = wheelPickerProperties
         }
 
-        fun setButtonText(buttonText: String) = apply {
-            this.buttonText = buttonText
+        fun setTextProperties(textProperties: TextProperties) = apply {
+            this.textProperties = textProperties
         }
 
-        fun setButtonText(@StringRes buttonTextRes: Int) = apply {
-            this.buttonText = context.getString(buttonTextRes)
+        fun setButtonProperties(buttonProperties: ButtonProperties) = apply {
+            this.buttonProperties = buttonProperties
         }
 
         fun setTheme(@StyleRes theme: Int) = apply {
             this.theme = theme
         }
 
-        fun setButtonBackgroundColor(@ColorRes buttonBackgroundColor: Int) = apply {
-            this.buttonBackgroundColor = buttonBackgroundColor
-        }
-
-        fun setButtonTextColor(@ColorRes buttonTextColor: Int) = apply {
-            this.buttonTextColor = buttonTextColor
-        }
-
-        fun setTextStyle(@StyleRes textTheme: Int) = apply {
-            this.textStyle = textTheme
-        }
-
-        fun setTitleStyle(@StyleRes titleStyle: Int) = apply {
-            this.titleStyle = titleStyle
-        }
-
         fun setOnPickedListener(onPickedListener: (Int, Int) -> Unit) = apply {
             this.onPickedListener = onPickedListener
         }
 
-        fun setSelectedTime(selectedHours: Int, selectedMinutes: Int) = apply {
+        fun setSelectedTime(selectedHours: String, selectedMinutes: String) = apply {
             this.selectedTime = Pair(selectedHours, selectedMinutes)
         }
 
         fun build() = TimePickerDialog(
             context,
             theme,
-            title,
+            titleProperties,
+            wheelPickerProperties,
+            textProperties,
+            buttonProperties,
             onPickedListener,
-            buttonBackgroundColor,
-            buttonTextColor,
-            textStyle,
-            titleStyle,
-            selectedTime,
-            buttonText
+            selectedTime
         )
     }
+
+    data class TitleProperties(
+        @StringRes val titleRes: Int = R.string.title,
+        @DimenRes val textSizeRes: Int = R.dimen.sp_12,
+        @ColorRes val textColorRes: Int = R.color.text_color_time_picker,
+        @DimenRes val marginTopRes: Int = R.dimen.dp_24,
+        @FontRes val textFontRes: Int = 0
+    )
+
+    data class WheelPickerProperties(
+        @DimenRes val textSize: Int = R.dimen.sp_42,
+        @ColorRes val selectedTextColorRes: Int = R.color.text_color_time_picker,
+        @ColorRes val textColorRes: Int = R.color.text_color_time_picker,
+        @DimenRes val marginTopRes: Int = R.dimen.dp_16,
+        val wheelItemCount: Int = 5,
+        val selectedTextScale: Float = 1.2f,
+        @FontRes val textFontRes: Int = 0
+    )
+
+    data class TextProperties(
+        @StringRes val hoursRes: Int = R.string.hours,
+        @StringRes val minutesRes: Int = R.string.minutes,
+        @DimenRes val textSizeRes: Int = R.dimen.sp_10,
+        @ColorRes val textColorRes: Int = R.color.text_color_time_picker,
+        @FontRes val textFontRes: Int = 0
+    )
+
+    data class ButtonProperties(
+        @StringRes val textRes: Int = R.string.pick,
+        @DimenRes val textSizeRes: Int = R.dimen.sp_12,
+        @ColorRes val textColorRes: Int = R.color.text_color_button,
+        @DimenRes val cornerRadiusRes: Int = R.dimen.dp_8,
+        @DimenRes val paddingTopRes: Int = R.dimen.dp_16,
+        @DimenRes val paddingBottomRes: Int = R.dimen.dp_16,
+        @DimenRes val marginStartRes: Int = R.dimen.dp_16,
+        @DimenRes val marginEndRes: Int = R.dimen.dp_16,
+        @DimenRes val marginTopRes: Int = R.dimen.dp_32,
+        @DimenRes val marginBottomRes: Int = R.dimen.sp_24,
+        @FontRes val textFontRes: Int = 0,
+        @ColorRes val buttonBackgroundColorRes: Int = R.color.button_tint_primary
+    )
 }
