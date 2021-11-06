@@ -20,7 +20,6 @@
         android:id="@+id/dialog_time_picker__tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_time_picker__top_view" />
@@ -39,7 +38,6 @@
         android:id="@+id/dialog_time_picker__tv_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hours"
         app:layout_constraintBottom_toBottomOf="@id/dialog_time_picker__hour_picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/dialog_time_picker__hour_picker" />
@@ -57,7 +55,6 @@
         android:id="@+id/dialog_time_picker__tv_minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/minutes"
         app:layout_constraintBottom_toBottomOf="@id/dialog_time_picker__minute_picker"
         app:layout_constraintEnd_toEndOf="@id/dialog_time_picker__minute_picker"
         app:layout_constraintTop_toTopOf="@id/dialog_time_picker__minute_picker" />
@@ -67,7 +64,6 @@
         style="@style/TimePicker.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/pick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

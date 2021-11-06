@@ -181,8 +181,6 @@ class WheelPicker @JvmOverloads constructor(
         return suggested
     }
 
-    fun getSuggestedMinHeight(): Int = suggestedMinimumHeight
-
     override fun getMinimumWidth(): Int = suggestedMinimumWidth
 
     override fun getBottomFadingEdgeStrength(): Float = TOP_AND_BOTTOM_FADING_EDGE_STRENGTH
@@ -282,6 +280,8 @@ class WheelPicker @JvmOverloads constructor(
         }
     }
 
+    fun getSuggestedMinHeight(): Int = suggestedMinimumHeight
+
     fun getSelectedTextScale(): Float = mSelectedTextScale
 
     fun setSelectedTextScale(mSelectedTextScale: Float) {
@@ -326,13 +326,9 @@ class WheelPicker @JvmOverloads constructor(
         changeValueBySteps(realPosition - mCurSelectedItemIndex)
     }
 
-    fun smoothScrollToValue(value: String) {
-        smoothScrollTo(getPosition(value))
-    }
+    fun smoothScrollToValue(value: String) = smoothScrollTo(getPosition(value))
 
-    fun scrollToValue(value: String) {
-        scrollTo(getPosition(value))
-    }
+    fun scrollToValue(value: String) = scrollTo(getPosition(value))
 
     fun setUnselectedTextColor(@ColorRes colorId: Int) {
         mUnSelectedTextColor = ContextCompat.getColor(context, colorId)
@@ -434,20 +430,16 @@ class WheelPicker @JvmOverloads constructor(
         }
     }
 
-    fun setValue(value: String) {
-        scrollToValue(value)
-    }
+    fun setValue(value: String) = scrollToValue(value)
 
     fun setMaxValue(max: Int) {
         mMaxIndex = max
     }
 
-    fun getMaxValue(): String {
-        return if (mAdapter != null) {
-            mAdapter!!.getValue(mMaxIndex)
-        } else {
-            mMaxIndex.toString()
-        }
+    fun getMaxValue(): String = if (mAdapter != null) {
+        mAdapter!!.getValue(mMaxIndex)
+    } else {
+        mMaxIndex.toString()
     }
 
     fun setMinValue(min: Int) {
@@ -475,7 +467,6 @@ class WheelPicker @JvmOverloads constructor(
     }
 
     fun getCurrentItem(): String = getValue(mCurSelectedItemIndex)
-
 
     fun getCurrentIndex(): Int = mCurSelectedItemIndex
 
@@ -507,13 +498,9 @@ class WheelPicker @JvmOverloads constructor(
         mVelocityTracker = null
     }
 
-    private fun getItemHeight(): Int {
-        return height / (mSelectorItemCount - 2)
-    }
+    private fun getItemHeight(): Int = height / (mSelectorItemCount - 2)
 
-    private fun getGapHeight(): Int {
-        return getItemHeight() - computeTextHeight()
-    }
+    private fun getGapHeight(): Int = getItemHeight() - computeTextHeight()
 
     private fun computeTextHeight(): Int {
         val metricsInt = mTextPaint.fontMetricsInt
@@ -624,31 +611,31 @@ class WheelPicker @JvmOverloads constructor(
         }
     }
 
-    private fun getWrappedSelectorIndex(selectorIndex: Int): Int {
-        if (selectorIndex > mMaxIndex) {
-            return mMinIndex + (selectorIndex - mMaxIndex) % (mMaxIndex - mMinIndex + 1) - 1
-        } else if (selectorIndex < mMinIndex) {
-            return mMaxIndex - (mMinIndex - selectorIndex) % (mMaxIndex - mMinIndex + 1) + 1
+    private fun getWrappedSelectorIndex(selectorIndex: Int): Int = when {
+        selectorIndex > mMaxIndex -> {
+            mMinIndex + (selectorIndex - mMaxIndex) % (mMaxIndex - mMinIndex + 1) - 1
         }
-        return selectorIndex
+        selectorIndex < mMinIndex -> {
+            mMaxIndex - (mMinIndex - selectorIndex) % (mMaxIndex - mMinIndex + 1) + 1
+        }
+        else -> {
+            selectorIndex
+        }
     }
 
-    private fun notifyChange(previous: Int, current: Int) {
+    private fun notifyChange(previous: Int, current: Int) =
         mOnValueChangeListener?.onValueChange(this, getValue(previous), getValue(current))
-    }
 
-    private fun validatePosition(position: Int): Int {
-        return if (!mWrapSelectorWheelPreferred) {
-            when {
-                mMaxValidIndex == null && position > mMaxIndex -> mMaxIndex
-                mMaxValidIndex != null && position > mMaxValidIndex!! -> mMaxValidIndex!!
-                mMinValidIndex == null && position < mMinIndex -> mMinIndex
-                mMinValidIndex != null && position < mMinValidIndex!! -> mMinValidIndex!!
-                else -> position
-            }
-        } else {
-            getWrappedSelectorIndex(position)
+    private fun validatePosition(position: Int): Int = if (!mWrapSelectorWheelPreferred) {
+        when {
+            mMaxValidIndex == null && position > mMaxIndex -> mMaxIndex
+            mMaxValidIndex != null && position > mMaxValidIndex!! -> mMaxValidIndex!!
+            mMinValidIndex == null && position < mMinIndex -> mMinIndex
+            mMinValidIndex != null && position < mMinValidIndex!! -> mMinValidIndex!!
+            else -> position
         }
+    } else {
+        getWrappedSelectorIndex(position)
     }
 
     private fun onTouchEventVertical(event: MotionEvent) {

@@ -22,8 +22,8 @@ abstract class WheelAdapter {
     abstract fun getPosition(value: String): Int
 
     /**
-     * get the text with potential maximum print length for support "WRAP_CONTENT" attribute
-     * if not sure, return empty("") string, in that case "WRAP_CONTENT" will behavior like "MATCH_PARENT"
+     * Get the text with potential maximum print length for support "WRAP_CONTENT" attribute.
+     * If not sure, return empty("") string, in that case "WRAP_CONTENT" will behavior like "MATCH_PARENT".
      */
     abstract fun getTextWithMaximumLength(): String
 }
