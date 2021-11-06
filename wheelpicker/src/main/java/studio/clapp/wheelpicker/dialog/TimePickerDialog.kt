@@ -92,7 +92,7 @@ class TimePickerDialog(
                     ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         setPadding(
-                            measuredWidth / WHEEL_PICKER_TEXT_PADDING_COEFFICIENT_DEFAULT,
+                            measuredWidth / WHEEL_PICKER_TEXT_PADDING_COEFFICIENT,
                             0,
                             0,
                             0
@@ -130,14 +130,14 @@ class TimePickerDialog(
                         setPadding(
                             0,
                             0,
-                            measuredWidth / WHEEL_PICKER_TEXT_PADDING_COEFFICIENT_DEFAULT,
+                            measuredWidth / WHEEL_PICKER_TEXT_PADDING_COEFFICIENT,
                             0
                         )
                         dialogTimePickerTvMinute.setPadding(
                             0,
                             dialogTimePickerTvMinute.textSize.toInt(),
                             ((paddingRight - (minimumWidth * getSelectedTextScale() - minimumWidth)
-                                    * MINUTE_TEXT_PADDING_COEFFICIENT_DEFAULT).toInt()),
+                                    * MINUTE_TEXT_PADDING_COEFFICIENT).toInt()),
                             0
                         )
                         viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -348,8 +348,8 @@ class TimePickerDialog(
     companion object {
         private const val WHEEL_ITEM_COUNT_DEFAULT = 5
         private const val SELECTED_TEXT_SCALE_DEFAULT = 1.2f
-        private const val WHEEL_PICKER_TEXT_PADDING_COEFFICIENT_DEFAULT = 3
-        private const val MINUTE_TEXT_PADDING_COEFFICIENT_DEFAULT = 1.75f
+        private const val WHEEL_PICKER_TEXT_PADDING_COEFFICIENT = 3
+        private const val MINUTE_TEXT_PADDING_COEFFICIENT = 1.75f
         const val TEXT_FONT_RES_DEFAULT = 0
     }
 }
