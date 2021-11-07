@@ -20,7 +20,7 @@ And add a dependency code to your **module**'s `build.gradle` file.
 
 ````gradle
 dependencies {
-    implementation 'studio.clapp:wheelpicker:1.0.0'
+    implementation 'studio.clapp:wheelpicker:1.0.1'
 }
 ````
 
