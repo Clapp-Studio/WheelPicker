@@ -475,9 +475,7 @@ class WheelPicker @JvmOverloads constructor(
     }
 
     /**
-     * Get the value of the adapter at the selected position.
-     *
-     * @return value at the specified position.
+     * Get the value of the adapter at the specified position.
      */
     fun getValue(position: Int): String = when {
         mAdapter != null -> mAdapter!!.getValue(position)

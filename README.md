@@ -30,7 +30,7 @@ dependencies {
 <dependency>
   <groupId>studio.clapp</groupId>
   <artifactId>wheelpicker</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>aar</type>
 </dependency>
 ````

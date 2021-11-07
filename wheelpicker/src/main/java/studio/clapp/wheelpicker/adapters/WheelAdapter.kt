@@ -6,6 +6,9 @@ abstract class WheelAdapter {
 
     var picker: WheelPicker? = null
 
+    /**
+     * Update wheel picker.
+     */
     fun notifyDataSetChanged() {
         picker?.setAdapter(this)
         picker?.requestLayout()
@@ -17,8 +20,14 @@ abstract class WheelAdapter {
 
     open fun getMaxValidIndex(): Int? = null
 
+    /**
+     * Get the value at the specified position.
+     */
     abstract fun getValue(position: Int): String
 
+    /**
+     * Get position of the specified value.
+     */
     abstract fun getPosition(value: String): Int
 
     /**
