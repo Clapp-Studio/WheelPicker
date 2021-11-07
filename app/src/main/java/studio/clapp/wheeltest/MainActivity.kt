@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         binding.dialogClassTimePickerHourPicker.setAdapter(
             timePickerHourAdapter
         )
-        TimePickerDialog.Builder(this).setOnPickedListener { i, i2 -> println("" + i + " " + i2) }
-            .setButtonBackgroundColor(R.color.black).setSelectedTime(23 + 24, 55 + 60).build()
+        TimePickerDialog.Builder(this).setOnPickedListener { i, i2 -> println("$i $i2") }
+            .setSelectedTime("23", "55").build()
             .show()
         binding.root.setOnClickListener {
             TimePickerDialog.Builder(this).build().show()
