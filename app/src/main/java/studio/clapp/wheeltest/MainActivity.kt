@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             timePickerHourAdapter
         )
         TimePickerDialog.Builder(this).setOnPickedListener { i, i2 -> println("$i $i2") }
-            .setSelectedTime((23 + 24).toString(), (55 + 60).toString()).build()
+            .setSelectedTime("23", "55").build()
             .show()
         binding.root.setOnClickListener {
             TimePickerDialog.Builder(this).build().show()

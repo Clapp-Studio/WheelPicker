@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="text_color_time_picker">#000000</color>
+    <color name="text_color_time_picker_selected">#ffe0e0e0</color>
     <color name="text_color_button">#FFFFFF</color>
     <color name="window_color_primary">#261F5281</color>
     <color name="background_primary">#FFFFFF</color>

@@ -215,9 +215,9 @@ class TimePickerDialog(
         /**
          * Set user define callback to get values of both wheel pickers.
          *
-         * <p>First value means hours.
+         * <p>First value means hours.</p>
          *
-         * <p>Second value means minutes.
+         * <p>Second value means minutes.</p>
          *
          * @param onPickedListener user define callback.
          */

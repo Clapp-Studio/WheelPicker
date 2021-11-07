@@ -1,4 +1,5 @@
 # WheelPicker
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/studio.clapp/wheelpicker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/studio.clapp/wheelpicker/)
 
 ## Including in your project
@@ -37,6 +38,7 @@ dependencies {
 ## Sample Usage
 
 ````xml
+
 <studio.clapp.wheelpicker.WheelPicker
     android:id="@+id/wheel_picker"
     android:layout_width="300dp"
@@ -49,6 +51,7 @@ dependencies {
 ````
 
 ## WheelPicker Attributes
+
 |Attr|Type|Description|
 |---|:---|:---:|
 |selectedTextColor|color|Text color of selected item|
@@ -64,11 +67,11 @@ dependencies {
 
 ## TimePickerDialog
 
-Simple customizable dialog to pick hours and minutes with help of wheel pickers.
+Simple customizable dialog to pick time with help of wheel pickers.
 
 ### Sample Usage
 
-#### From activity: 
+#### From activity:
 
 ````kotlin
 TimePickerDialog.Builder(this).build().show()
@@ -91,31 +94,12 @@ TimePickerDialog.Builder(this).setOnPickedListener { hours, minutes -> println("
 ### To set initial time
 
 ````kotlin
-TimePickerDialog.Builder(this).setSelectedTime(("23", "55"))
+TimePickerDialog.Builder(this).setSelectedTime("23", "55")
     .build()
     .show()
 ````
 
 # License
 
-````xml
-Copyright (c) 2021 Clapp Studio
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-````
+WheelPicker is distributed under the MIT license.
+See [LICENSE](https://github.com/Clapp-Studio/WheelPicker/blob/master/LICENSE) for details.

@@ -83,10 +83,12 @@ class WheelPicker @JvmOverloads constructor(
 
         mMinIndex = attributesArray.getInt(R.styleable.WheelPicker_min, Integer.MIN_VALUE)
         mMaxIndex = attributesArray.getInt(R.styleable.WheelPicker_max, Integer.MAX_VALUE)
-        if (attributesArray.hasValue(R.styleable.WheelPicker_maxValidIndex))
+        if (attributesArray.hasValue(R.styleable.WheelPicker_maxValidIndex)) {
             mMaxValidIndex = attributesArray.getInt(R.styleable.WheelPicker_maxValidIndex, 0)
-        if (attributesArray.hasValue(R.styleable.WheelPicker_minValidIndex))
+        }
+        if (attributesArray.hasValue(R.styleable.WheelPicker_minValidIndex)) {
             mMinValidIndex = attributesArray.getInt(R.styleable.WheelPicker_minValidIndex, 0)
+        }
         mWrapSelectorWheelPreferred =
             attributesArray.getBoolean(R.styleable.WheelPicker_wrapSelectorWheel, false)
         mSelectedTextScale =
@@ -148,11 +150,12 @@ class WheelPicker @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // Try greedily to fit the max width and height.
         var lp: ViewGroup.LayoutParams? = layoutParams
-        if (lp == null)
+        if (lp == null) {
             lp = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+        }
 
         var width = calculateSize(suggestedMinimumWidth, lp.width, widthMeasureSpec)
         var height = calculateSize(suggestedMinimumHeight, lp.height, heightMeasureSpec)
@@ -199,18 +202,18 @@ class WheelPicker @JvmOverloads constructor(
     }
 
     override fun scrollBy(x: Int, y: Int) {
-        if (y == 0)
+        if (y == 0) {
             return
+        }
 
         val gap = mTextGapHeight
 
-        if (!mWrapSelectorWheelPreferred && y > 0
-            && (mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinIndex
+        if (!mWrapSelectorWheelPreferred && y > 0 && (mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinIndex
                     || (mMinValidIndex != null && mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinValidIndex!!))
         ) {
-            if (mCurrentFirstItemOffset + y - mInitialFirstItemOffset < gap / 2)
+            if (mCurrentFirstItemOffset + y - mInitialFirstItemOffset < gap / 2) {
                 mCurrentFirstItemOffset += y
-            else {
+            } else {
                 mCurrentFirstItemOffset = mInitialFirstItemOffset + (gap / 2)
                 if (!mOverScroller!!.isFinished && !mIsDragging) {
                     mOverScroller!!.abortAnimation()
@@ -219,13 +222,12 @@ class WheelPicker @JvmOverloads constructor(
             return
         }
 
-        if (!mWrapSelectorWheelPreferred && y < 0
-            && (mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxIndex
+        if (!mWrapSelectorWheelPreferred && y < 0 && (mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxIndex
                     || (mMaxValidIndex != null && mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxValidIndex!!))
         ) {
-            if (mCurrentFirstItemOffset + y - mInitialFirstItemOffset > -(gap / 2))
+            if (mCurrentFirstItemOffset + y - mInitialFirstItemOffset > -(gap / 2)) {
                 mCurrentFirstItemOffset += y
-            else {
+            } else {
                 mCurrentFirstItemOffset = mInitialFirstItemOffset - (gap / 2)
                 if (!mOverScroller!!.isFinished && !mIsDragging) {
                     mOverScroller!!.abortAnimation()
@@ -239,8 +241,7 @@ class WheelPicker @JvmOverloads constructor(
         while (mCurrentFirstItemOffset - mInitialFirstItemOffset < -gap) {
             mCurrentFirstItemOffset += mItemHeight
             increaseSelectorsIndex()
-            if (!mWrapSelectorWheelPreferred
-                && (mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxIndex
+            if (!mWrapSelectorWheelPreferred && (mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxIndex
                         || (mMaxValidIndex != null && mSelectorItemIndices[mWheelMiddleItemIndex] >= mMaxValidIndex!!))
             ) {
                 mCurrentFirstItemOffset = mInitialFirstItemOffset
@@ -250,8 +251,7 @@ class WheelPicker @JvmOverloads constructor(
         while (mCurrentFirstItemOffset - mInitialFirstItemOffset > gap) {
             mCurrentFirstItemOffset -= mItemHeight
             decreaseSelectorsIndex()
-            if (!mWrapSelectorWheelPreferred
-                && (mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinIndex
+            if (!mWrapSelectorWheelPreferred && (mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinIndex
                         || (mMinValidIndex != null && mSelectorItemIndices[mWheelMiddleItemIndex] <= mMinValidIndex!!))
             ) {
                 mCurrentFirstItemOffset = mInitialFirstItemOffset
@@ -266,7 +266,6 @@ class WheelPicker @JvmOverloads constructor(
             val x = mOverScroller!!.currX
             val y = mOverScroller!!.currY
 
-
             if (mPreviousScrollerY == 0) {
                 mPreviousScrollerY = mOverScroller!!.startY
             }
@@ -274,35 +273,68 @@ class WheelPicker @JvmOverloads constructor(
             mPreviousScrollerY = y
             invalidate()
         } else {
-            if (!mIsDragging)
-            //align item
+            if (!mIsDragging) {
+                //align item
                 adjustItemVertical()
+            }
         }
     }
 
+    /**
+     * Get min height of wheel picker without considering text scale of selected item.
+     *
+     * @return suggestedMinimumHeight.
+     */
     fun getSuggestedMinHeight(): Int = suggestedMinimumHeight
 
+    /**
+     * Get text scale of selected item.
+     *
+     * @return mSelectedTextScale.
+     */
     fun getSelectedTextScale(): Float = mSelectedTextScale
 
+    /**
+     * Set user define text scale of selected item.
+     *
+     * @param mSelectedTextScale text scale to be set.
+     */
     fun setSelectedTextScale(mSelectedTextScale: Float) {
         this.mSelectedTextScale = mSelectedTextScale
     }
 
+    /**
+     * Set user define text size.
+     *
+     * @param mTextSizeRes text size to be set.
+     */
     fun setTextSize(@DimenRes mTextSizeRes: Int) {
         this.mTextSize = context.resources.getDimension(mTextSizeRes).toInt()
     }
 
+    /**
+     * Set user define callback when {@link MotionEvent#ACTION_UP} occurs.
+     */
     fun setOnUpListener(touchUpListener: () -> Unit) {
         this.touchUpListener = touchUpListener
     }
 
+    /**
+     * Set user define callback when {@link MotionEvent#ACTION_DOWN} occurs.
+     */
     fun setOnDownListener(touchDownListener: () -> Unit) {
         this.touchDownListener = touchDownListener
     }
 
+    /**
+     * Scroll picker to selected position.
+     *
+     * @param position position to scroll to.
+     */
     fun scrollTo(position: Int) {
-        if (mCurSelectedItemIndex == position)
+        if (mCurSelectedItemIndex == position) {
             return
+        }
 
         mCurSelectedItemIndex = position
         mSelectorItemIndices.clear()
@@ -317,29 +349,52 @@ class WheelPicker @JvmOverloads constructor(
         invalidate()
     }
 
+    /**
+     * Set user define callback when new value is selected.
+     */
     fun setOnValueChangedListener(onValueChangeListener: OnValueChangeListener) {
         mOnValueChangeListener = onValueChangeListener
     }
 
+    /**
+     * Smoothly scroll picker to selected position.
+     *
+     * @param position position to scroll to.
+     */
     fun smoothScrollTo(position: Int) {
         val realPosition = validatePosition(position)
         changeValueBySteps(realPosition - mCurSelectedItemIndex)
     }
 
+    /**
+     * Smoothly scroll picker to selected value.
+     *
+     * @param value value to scroll to.
+     */
     fun smoothScrollToValue(value: String) = smoothScrollTo(getPosition(value))
 
+    /**
+     * Scroll picker to selected value.
+     *
+     * @param value value to scroll to.
+     */
     fun scrollToValue(value: String) = scrollTo(getPosition(value))
 
+    /**
+     * Set user define unselected text color.
+     *
+     * @param colorId text color resource of unselected item.
+     */
     fun setUnselectedTextColor(@ColorRes colorId: Int) {
         mUnSelectedTextColor = ContextCompat.getColor(context, colorId)
         invalidate()
     }
 
     /**
-     * Set user define adapter
+     * Set user define adapter.
      *
-     * @adapter user define adapter
-     * @indexRangeBasedOnAdapterSize specific if the picker's min~max range is based on adapter's size
+     * @param adapter adapter to be set.
+     * @param indexRangeBasedOnAdapterSize specific if the picker's min~max range is based on adapter's size.
      */
     fun setAdapter(adapter: WheelAdapter?, indexRangeBasedOnAdapterSize: Boolean = true) {
         mAdapter = adapter
@@ -367,10 +422,12 @@ class WheelPicker @JvmOverloads constructor(
      * Sets whether the selector wheel shown during flinging/scrolling should
      * wrap around the {@link NumberPicker#getMinValue()} and
      * {@link NumberPicker#getMaxValue()} values.
+     *
      * <p>
      * By default if the range (max - min) is more than the number of items shown
      * on the selector wheel the selector wheel wrapping is enabled.
      * </p>
+     *
      * <p>
      * <strong>Note:</strong> If the number of items, i.e. the range (
      * {@link #getMaxValue()} - {@link #getMinValue()}) is less than
@@ -378,7 +435,7 @@ class WheelPicker @JvmOverloads constructor(
      * not wrap. Hence, in such a case calling this method is a NOP.
      * </p>
      *
-     * @param wrap Whether to wrap.
+     * @param wrap whether to wrap.
      */
     fun setWrapSelectorWheel(wrap: Boolean) {
         mWrapSelectorWheelPreferred = wrap
@@ -388,10 +445,10 @@ class WheelPicker @JvmOverloads constructor(
     /**
      * Gets whether the selector wheel wraps when reaching the min/max value.
      *
-     * @return True if the selector wheel wraps.
+     * @return true if the selector wheel wraps.
      *
-     * @see .getMinValue
-     * @see .getMaxValue
+     * @see #getMinValue()
+     * @see #getMaxValue()
      */
     fun getWrapSelectorWheel(): Boolean = mWrapSelectorWheelPreferred
 
@@ -417,6 +474,11 @@ class WheelPicker @JvmOverloads constructor(
         invalidate()
     }
 
+    /**
+     * Get the value of the adapter at the selected position.
+     *
+     * @return value at the specified position.
+     */
     fun getValue(position: Int): String = when {
         mAdapter != null -> mAdapter!!.getValue(position)
         else -> if (!mWrapSelectorWheelPreferred) {
@@ -430,44 +492,82 @@ class WheelPicker @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Select specified value.
+     */
     fun setValue(value: String) = scrollToValue(value)
 
+    /**
+     * Set new maximum visible item index.
+     */
     fun setMaxValue(max: Int) {
         mMaxIndex = max
     }
 
+    /**
+     * Get maximum value of wheel picker.
+     *
+     * @return maximum value of adapter or maximum visible item index of wheel picker.
+     */
     fun getMaxValue(): String = if (mAdapter != null) {
         mAdapter!!.getValue(mMaxIndex)
     } else {
         mMaxIndex.toString()
     }
 
+    /**
+     * Set new minimum visible item index.
+     */
     fun setMinValue(min: Int) {
         mMinIndex = min
     }
 
+    /**
+     * Set new minimum valid visible item index.
+     */
     fun setMinValidValue(minValid: Int?) {
         mMinValidIndex = minValid
     }
 
+    /**
+     * Set new maximum valid visible item index.
+     */
     fun setMaxValidValue(maxValid: Int?) {
         mMaxValidIndex = maxValid
     }
 
+    /**
+     * Get minimum value of wheel picker.
+     *
+     * @return minimum value of adapter or minimum visible item index of wheel picker.
+     */
     fun getMinValue(): String = if (mAdapter != null) {
         mAdapter!!.getValue(mMinIndex)
     } else {
         mMinIndex.toString()
     }
 
+    /**
+     * Reset wheel picker to initial status.
+     */
     fun reset() {
         initializeSelectorWheelIndices()
         initializeSelectorWheel()
         invalidate()
     }
 
+    /**
+     * Get current selected item.
+     *
+     * @return selected item of adapter.
+     */
     fun getCurrentItem(): String = getValue(mCurSelectedItemIndex)
 
+    /**
+     * Get index of current selected item.
+     *
+     * @return index of selected item of adapter.
+     */
     fun getCurrentIndex(): Int = mCurSelectedItemIndex
 
     private fun isValidPosition(position: Int): Boolean = when {
@@ -481,10 +581,11 @@ class WheelPicker @JvmOverloads constructor(
         var deltaY = mInitialFirstItemOffset - mCurrentFirstItemOffset
 
         if (abs(deltaY) > mItemHeight / 2) {
-            deltaY += if (deltaY > 0)
+            deltaY += if (deltaY > 0) {
                 -mItemHeight
-            else
+            } else {
                 mItemHeight
+            }
         }
 
         if (deltaY != 0) {
@@ -508,8 +609,9 @@ class WheelPicker @JvmOverloads constructor(
     }
 
     private fun drawVertical(canvas: Canvas) {
-        if (mSelectorItemIndices.size == 0)
+        if (mSelectorItemIndices.size == 0) {
             return
+        }
         val itemHeight = getItemHeight()
 
         val x = when (mTextPaint.textAlign) {
@@ -546,7 +648,8 @@ class WheelPicker @JvmOverloads constructor(
                     mTextPaint.color = mUnSelectedTextColor
                 }
             } else {
-                mTextPaint.color = ContextCompat.getColor(context, R.color.material_grey_300)
+                mTextPaint.color =
+                    ContextCompat.getColor(context, R.color.text_color_time_picker_selected)
             }
             canvas.save()
             canvas.scale(scale, scale, x, y)
@@ -650,8 +753,9 @@ class WheelPicker @JvmOverloads constructor(
                 if (this::touchDownListener.isInitialized) {
                     touchDownListener()
                 }
-                if (!mOverScroller!!.isFinished)
+                if (!mOverScroller!!.isFinished) {
                     mOverScroller!!.forceFinished(true)
+                }
 
                 mLastY = event.y
             }
@@ -738,10 +842,11 @@ class WheelPicker @JvmOverloads constructor(
         val widthForMinIndex = mTextPaint.measureText(mMinIndex.toString()).toInt()
         val widthForMaxIndex = mTextPaint.measureText(mMaxIndex.toString()).toInt()
         mTextPaint.textSize = mTextSize * 1.0f
-        return if (widthForMinIndex > widthForMaxIndex)
+        return if (widthForMinIndex > widthForMaxIndex) {
             widthForMinIndex
-        else
+        } else {
             widthForMaxIndex
+        }
     }
 
     private fun calculateSize(suggestedSize: Int, paramSize: Int, measureSpec: Int): Int {
@@ -760,14 +865,13 @@ class WheelPicker @JvmOverloads constructor(
                 }
             MeasureSpec.EXACTLY -> result = size
             MeasureSpec.UNSPECIFIED ->
-                result =
-                    if (paramSize == ViewGroup.LayoutParams.WRAP_CONTENT || paramSize == ViewGroup.LayoutParams
-                            .MATCH_PARENT
-                    )
-                        suggestedSize
-                    else {
-                        paramSize
-                    }
+                result = if (paramSize == ViewGroup.LayoutParams.WRAP_CONTENT
+                    || paramSize == ViewGroup.LayoutParams.MATCH_PARENT
+                ) {
+                    suggestedSize
+                } else {
+                    paramSize
+                }
         }
 
         return result
@@ -786,8 +890,9 @@ class WheelPicker @JvmOverloads constructor(
 
     private fun initializeFadingEdges() {
         isVerticalFadingEdgeEnabled = mFadingEdgeEnabled
-        if (mFadingEdgeEnabled)
+        if (mFadingEdgeEnabled) {
             setFadingEdgeLength((bottom - top - mTextSize) / 2)
+        }
     }
 
     private fun initializeSelectorWheelIndices() {
