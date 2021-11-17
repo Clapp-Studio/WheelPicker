@@ -2,6 +2,8 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/studio.clapp/wheelpicker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/studio.clapp/wheelpicker/)
 
+![WheelPicker gif](https://clapp.studio/static/images/github/wheelpicker.gif)
+
 ## Including in your project
 
 ### Gradle
@@ -39,15 +41,9 @@ dependencies {
 
 ````xml
 
-<studio.clapp.wheelpicker.WheelPicker
-    android:id="@+id/wheel_picker"
-    android:layout_width="300dp"
-    android:layout_height="250dp"
-    android:layout_marginTop="64dp"
-    app:align="CENTER"
-    app:selectedTextScale="1.2"
-    app:textSize="42sp"
-    app:wheelItemCount="5" />
+<studio.clapp.wheelpicker.WheelPicker android:id="@+id/wheel_picker" android:layout_width="300dp"
+    android:layout_height="250dp" android:layout_marginTop="64dp" app:align="CENTER"
+    app:selectedTextScale="1.2" app:textSize="42sp" app:wheelItemCount="5" />
 ````
 
 ## WheelPicker Attributes
@@ -68,6 +64,8 @@ dependencies {
 ## TimePickerDialog
 
 Simple customizable dialog to pick time with help of wheel pickers.
+
+![WheelPickerDialog gif](https://clapp.studio/static/images/github/dialog.gif)
 
 ### Sample Usage
 
